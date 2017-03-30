@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GAME</title>
+	<script src="./worldmap.js"></script>
+
+	<style type="text/css">
+		canvas{
+			border:2px solid black;
+		}
+
+	</style>
+</head>
+<body>
+<canvas id="myCanvas" width="400" height="400"></canvas>
+
+
+<script type="text/javascript">
+	//document.write(TileMaps["worldmap"].layers[0].opacity);
+	
+	
+
+	var layers=TileMaps["worldmap"].layers[0];
+	var nobX=TileMaps["worldmap"].height;
+	var nobY=TileMaps["worldmap"].width;
+	var screen=layers.data;
+	var tilesets=TileMaps["worldmap"].tilesets;
+	var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    var image = [];
+    var isLoaded=[];
+    var noOfIMGLoaded=0;
+    var tileHeight=TileMaps["worldmap"].tileheight;
+    var tileWidth=TileMaps["worldmap"].tilewidth;
+    var player={x:4,y:12};
+    canvas.width=tileWidth*nobX;
+    canvas.height=tileHeight*nobY;
+
+    // imageObj.onload = function() {
+    //     context.drawImage(imageObj, 69, 50);
+    // };
+
+    document.addEventListener("keydown", keyDownHandler, false);
+
+		function keyDownHandler(e) {
+			if(e.keyCode == 37) {
+		    	//LeftArrow
+		    	player.x--;
+		    	if(!checkInWater()){
+		    		player.x++;
+		    	}else{
+		    		render();
+		    	}
+		    }
+		    if(e.keyCode == 38) {
+		    	//UpArrow
+		    	player.y--;
+		    	if(!checkInWater()){
+		    		player.y++;
+		    	}else{
+		    		render();
+		    	}
+		    }
+		    if(e.keyCode == 39) {
+		    	//RightArrow
+		    	player.x++;
+		    	if(!checkInWater()){
+		    		player.x--;
+		    	}else{
+		    		render();
+		    	}
+		    }
+		    if(e.keyCode == 40){
+		    	//DOwnArrow
+		    	player.y++;
+		    	if(!checkInWater()){
+		    		player.y--;
+		    	}else{
+		    		render();
+		    	}
+		    }
+		}
+
+
+
+    function getTile (col,row) {
+        return this.screen[row * nobX + col];
+    };
+
+    function checkInWater(){
+    	if(getTile(player.x,player.y)==3){
+    		return true;
+    	}
+    	return false;
+    }
+
+
+    var render = function(){
+    	for(var i=0;i<nobX;i++){
+    		for(var j=0;j<nobY;j++){
+    			//console.log(getTile(i,j)+" , ");
+    			//console.log(+""+);
+
+    			ctx.drawImage(image[getTile(i,j)-1],i*tileWidth,j*tileHeight);
+
+    		}
+    	}
+
+    	//draw the player
+    	ctx.beginPath();
+		ctx.rect(player.x*tileWidth, player.y*tileHeight,tileWidth, tileHeight);
+		ctx.fillStyle = '#000';
+		ctx.fill();
+		ctx.closePath();
+    }
+
+
+
+
+
+    function loadAssets(){
+    	for(var i=0;i<tilesets.length;i++){
+    		isLoaded[i]=false;
+    		image[i]=new Image();
+    		image[i].onload=function(){
+    			isLoaded[i]=true;
+    			noOfIMGLoaded++;
+    			if(noOfIMGLoaded==tilesets.length){
+    				setInterval(render,400);
+    			}
+    		};
+    		//console.log(tilesets[i].image);
+    		image[i].src=tilesets[i].image;
+    	}
+    }
+    
+
+	
+    
+    loadAssets();
+   
+
+	
+
+</script>
+</body>
+
+
+</html>
