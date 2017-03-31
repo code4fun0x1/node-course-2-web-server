@@ -1,6 +1,12 @@
 const express = require('express');
 const fs=require('fs');
 
+//before deploying our app we need to set out port dynamically
+//we use environment variable for it
+//if it is not present then use 3000
+const PORT=process.env.PORT || 3000;
+
+
 //make an express app
 var app = express();
 
@@ -90,6 +96,6 @@ app.get('/bad', (reeq, res) => {
 //BIND THE HANDLER TO TE PORT
 
 //app.listen(3000);
-app.listen(3000, () => {
-    console.log('Server is up');
+app.listen(PORT, () => {
+    console.log(`Server is up at port ${PORT}`);
 })
