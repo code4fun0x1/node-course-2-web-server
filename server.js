@@ -85,11 +85,18 @@ app.get('/about', (req, res) => {
 
 
 
-app.get('/bad', (reeq, res) => {
+app.get('/bad', (req, res) => {
     res.send({
         errorMessage: 'Cannot Find the Page'
     });
 })
+
+//TEST FOR COMPLETE LYFECYCLE
+app.get('/projects',(req,res)=>{
+  res.render('projects.hbs',{pageTitle:'Projects'});
+});
+
+
 
 
 //STEP 3
